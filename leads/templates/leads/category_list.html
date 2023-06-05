@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="max-w-3xl text-gray-700 body-font mx-auto">
+    <div class="flex container px-5 mx-auto flex flex-wrap justify-between">
+      <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку контактов</a>
+      <div class="w-full py-6 flex justify-between items-end border-t border-gray-200">
+        <h1 class="text-4xl text-gray-800">Категории</h1>
+        <a href="{% url 'leads:category-create' %}" class="hover:text-blue-500">Добавить категорию</a>
+      </div>
+      <div class="flex flex-col w-full">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Название</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Количество контактов</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for category in categories %}
+                      <tr class='bg-white'>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            <a class="text-blue-500 hover:text-blue-600" href="{% url 'leads:category-detail' category.pk %}">
+                              {{ category }}
+                            </a>
+                          </td>
+                          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ category.leads.all|length }}</td>
+                      </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}

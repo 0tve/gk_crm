@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+    {% block head %}
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CRM ГК-Мебель</title>
+        <link rel="icon" href="{% static 'images/favicon.png' %}">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    {% endblock head %}
+<body>
+    <div class="max-w-7xl mx-auto mb-20">
+        {% include 'navbar.html' %}
+        {% include 'messages.html' %}
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+</html>
