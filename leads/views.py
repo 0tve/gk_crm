@@ -120,6 +120,20 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
         return context
 
 
+class UnassignedLeadListView(LoginRequiredMixin, generic.ListView):
+    template_name = "leads/unassigned_lead_list.html"
+    context_object_name = "unassigned_leads"
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_organisor:
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile,
+                agent__isnull=True
+            )
+        return queryset
+
+
 class LeadDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "leads/lead_detail.html"
     context_object_name = "lead"
@@ -207,7 +221,7 @@ class AssignAgentView(OrganisorAndLoginRequiredMixin, generic.FormView):
         return kwargs
 
     def get_success_url(self):
-        return reverse("leads:lead-list")
+        return reverse("leads:unassigned-lead-list")
 
     def form_valid(self, form):
         agent = form.cleaned_data["agent"]
