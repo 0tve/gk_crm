@@ -167,9 +167,9 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
         lead.organisation = self.request.user.userprofile
         
         if not Category.objects.filter(organisation=user.userprofile):
-            Category.objects.create(name="Без категории", organisation=user.userprofile)
+            Category.objects.create(name="Заказ оформлен", organisation=user.userprofile)
             
-        lead.category = Category.objects.get(name='Без категории')
+        lead.category = Category.objects.get(name='Заказ оформлен')
         lead.save()
         messages.success(self.request, 'Контакт был успешно создан')
         return super(LeadCreateView, self).form_valid(form)
@@ -186,7 +186,6 @@ class LeadUpdateView(OrganisorAndLoginRequiredMixin, generic.UpdateView):
 
     def get_queryset(self):
         user = self.request.user
-        print(Lead.objects.filter(organisation=user.userprofile))
         return Lead.objects.filter(organisation=user.userprofile)
 
     def get_success_url(self):
@@ -347,6 +346,7 @@ class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
             if lead_before_update.category != converted_category:
                 instance.converted_date = datetime.datetime.now()
         instance.save()
+        messages.info(self.request, 'Статус был успешно изменен')
         return super(LeadCategoryUpdateView, self).form_valid(form)
 
 

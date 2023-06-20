@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-from leads.models import Agent
+from leads.models import Agent, User
 from .forms import AgentModelForm
 from .mixins import OrganisorAndLoginRequiredMixin
 from django.contrib import messages
@@ -58,13 +58,17 @@ class AgentUpdateView(OrganisorAndLoginRequiredMixin, generic.UpdateView):
     template_name = "agents/agent_update.html"
     form_class = AgentModelForm
     
-    def get_success_url(self):
-        return reverse("agents:agent-list")
-
     def get_queryset(self):
         organisation = self.request.user.userprofile
-        print(Agent.objects.filter(organisation=organisation))
         return Agent.objects.filter(organisation=organisation)
+    
+    def get_form_kwargs(self):
+        kwargs = super(AgentUpdateView, self).get_form_kwargs()
+        kwargs['instance'] = kwargs['instance'].user
+        return kwargs
+    
+    def get_success_url(self):
+        return reverse("agents:agent-list")
     
     def form_valid(self, form):
         form.save()

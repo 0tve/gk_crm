@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm, SetPasswordForm
 from .models import Lead, Agent, Category, FollowUp
+from agents.forms import CustomClearableFileInput
 from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
@@ -16,7 +17,8 @@ class LeadModelForm(forms.ModelForm):
             'middle_name',
             'age',
             'agent',
-            'description',
+            'address',
+            'order',
             'phone_number',
             'email',
             'profile_picture',
@@ -28,10 +30,15 @@ class LeadModelForm(forms.ModelForm):
             'middle_name': 'Отчество',
             'age': 'Возраст',
             'agent': 'Ответственный исполнитель',
-            'description': 'Описание',
+            'address': 'Адрес',
+            'order': 'Заказ',
             'phone_number': 'Телефон',
             'email': 'Электронная почта',
             'profile_picture': 'Фото',
+        }
+        
+        widgets = {
+            'profile_picture': CustomClearableFileInput(),
         }
         
     def __init__(self, *args, **kwargs):
@@ -43,8 +50,7 @@ class LeadModelForm(forms.ModelForm):
         self.fields['profile_picture'].widget.input_text = "Изменить"
 
 
-class CustomPasswordResetConfirmForm(SetPasswordForm):
-    
+class CustomPasswordResetConfirmForm(SetPasswordForm): 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(CustomPasswordResetConfirmForm, self).__init__(*args, **kwargs)
         self.fields['new_password1'].label = 'Новый пароль'
@@ -52,7 +58,7 @@ class CustomPasswordResetConfirmForm(SetPasswordForm):
                                                Пароль не может состоять только из цифр.<br>
                                                Пароль не должен быть узнаваемым."""
         self.fields['new_password2'].label = 'Повторите новый пароль'
-        
+        self.error_messages['password_mismatch'] = 'Введеные пароли не совпадают'        
 
 
 class CustomLoginForm(AuthenticationForm):

@@ -3,6 +3,14 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
 
 
+AGES = (
+    ('Не указан', 'Не указан'),
+    ('Молодой', 'Молодой'),
+    ('Средний', 'Средний'),
+    ('Пожилой', 'Пожилой'),
+)
+
+
 class User(AbstractUser):
     middle_name = models.CharField(max_length=20, null=True, blank=True)
     is_organisor = models.BooleanField(default=True)
@@ -16,18 +24,18 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-
 class Lead(models.Model):
     first_name = models.CharField(max_length=20)
     middle_name = models.CharField(max_length=20, blank=True)
     last_name = models.CharField(max_length=20)
-    age = models.IntegerField(default=0, null=True, blank=True)
+    age = models.CharField(max_length=20, choices=AGES, default=AGES[0])
     organisation = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     agent = models.ForeignKey(
         "Agent", null=True, blank=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(
         "Category", related_name="leads", null=True, blank=False, default='Без категории', on_delete=models.SET_NULL)
-    description = models.TextField(null=True, blank=True)
+    address = models.CharField(max_length=255)
+    order = models.CharField(max_length=255)
     date_added = models.DateTimeField(auto_now_add=True)
     phone_number = models.CharField(max_length=20)
     email = models.EmailField()
@@ -57,7 +65,7 @@ class Agent(models.Model):
     organisation = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.email
+        return f"{self.user.first_name} {self.user.last_name}"
 
 
 class Category(models.Model):

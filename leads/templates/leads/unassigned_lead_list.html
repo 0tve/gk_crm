@@ -4,7 +4,9 @@
 {% block content %}
 <section class="text-gray-700 body-font">
     <div class="flex container mx-auto flex-wrap justify-between">
-        <a href="{% url 'leads:lead-list' %}" class="my-6 mx-4 hover:text-blue-500 border-b border-gray-200 w-full">Вернуться к списку контактов</a>
+        <div class="my-6 mx-4 border-b border-gray-200 w-full">
+            <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку контактов</a>
+        </div>
         {% if unassigned_leads.exists %}
         <div class="flex flex-wrap w-full">
             <div class="ml-4 w-full">
@@ -20,8 +22,8 @@
                         <h2 class="text-gray-900 text-lg title-font font-medium mb-3">
                             {{ lead.first_name }} {{ lead.last_name }}
                         </h2>
-                        <p class="whitespace-pre-line">{{ lead.description }}
-                        </p>
+                        <p class="whitespace-pre-line">{{ lead.order }}</p>
+                        <p class="whitespace-pre-line">{{ lead.address }}</p>
                         <a href="{% url 'leads:assign-agent' lead.pk %}" class="mt-3 text-blue-500 hover:text-blue-600 inline-flex items-center">
                             Назначить ответственного
                             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
