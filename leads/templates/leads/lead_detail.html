@@ -15,8 +15,8 @@
                         <div class="flex space-x-3">
                             <h3 class="text-3xl text-gray-900 font-medium">{{ lead.last_name }} {{ lead.first_name }} {{ lead.middle_name }}</h3>
                         </div>
-                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">{{ lead.order }}</p>
-                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">{{ lead.address }}</p>
+                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">Заказ: {{ lead.order }}</p>
+                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">Адрес: {{ lead.address }}</p>
                         <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">Ответственный: <a class='hover:text-blue-600' href="{% url 'agents:agent-detail' lead.agent.pk %}">{{ lead.agent.user.first_name }} {{ lead.agent.user.last_name }}</a></p>
                     </div>
                     {% if lead.profile_picture %}

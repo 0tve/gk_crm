@@ -138,6 +138,10 @@ class FollowUpModelForm(forms.ModelForm):
             'notes': 'Описание',
             'file': 'Файл',
         }
+        
+        widgets = {
+            'file': CustomClearableFileInput(),
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

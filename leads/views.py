@@ -2,8 +2,8 @@ import logging
 import datetime
 
 
+from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.http.response import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,6 +25,16 @@ from .forms import (
 logger = logging.getLogger(__name__)
 
 
+def lead_toggle_active(request, pk):
+    lead = Lead.objects.get(id=pk)
+    if lead.is_active:
+        lead.is_active = False
+    else:
+        lead.is_active = True
+    lead.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     template_name = "registration/password_reset_confirm.html"
     form_class = CustomPasswordResetConfirmForm
@@ -33,8 +43,8 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
     form_class = CustomLoginForm
-    
-    
+
+
 class SignupView(generic.CreateView):
     template_name = "registration/signup.html"
     form_class = CustomUserCreationForm
@@ -78,7 +88,7 @@ class DashboardView(OrganisorAndLoginRequiredMixin, generic.TemplateView):
             category=converted_category,
             converted_date__gte=thirty_days_ago
         ).count()
-            
+
         context.update({
             "total_lead_count": total_lead_count,
             "total_in_past30": total_in_past30,
@@ -96,12 +106,14 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
         if user.is_organisor:
             queryset = Lead.objects.filter(
                 organisation=user.userprofile,
-                agent__isnull=False
+                agent__isnull=False,
+                is_active=True
             )
         else:
             queryset = Lead.objects.filter(
                 organisation=user.agent.organisation,
-                agent__isnull=False
+                agent__isnull=False,
+                is_active=True
             )
             queryset = queryset.filter(agent__user=user)
         return queryset
@@ -112,12 +124,35 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
         if user.is_organisor:
             queryset = Lead.objects.filter(
                 organisation=user.userprofile,
-                agent__isnull=True
+                agent__isnull=True,
+                is_active=True
             )
             context.update({
                 "unassigned_leads": queryset
             })
         return context
+
+
+class LeadArchiveView(LoginRequiredMixin, generic.ListView):
+    template_name = "leads/lead_archive.html"
+    context_object_name = "leads"
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_organisor:
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile,
+                agent__isnull=False,
+                is_active=False
+            )
+        else:
+            queryset = Lead.objects.filter(
+                organisation=user.agent.organisation,
+                agent__isnull=False,
+                is_active=False
+            )
+            queryset = queryset.filter(agent__user=user)
+        return queryset
 
 
 class UnassignedLeadListView(LoginRequiredMixin, generic.ListView):
@@ -165,10 +200,10 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
         user = self.request.user
         lead = form.save(commit=False)
         lead.organisation = self.request.user.userprofile
-        
+
         if not Category.objects.filter(organisation=user.userprofile):
             Category.objects.create(name="Заказ оформлен", organisation=user.userprofile)
-            
+
         lead.category = Category.objects.get(name='Заказ оформлен')
         lead.save()
         messages.success(self.request, 'Контакт был успешно создан')
@@ -178,7 +213,7 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
 class LeadUpdateView(OrganisorAndLoginRequiredMixin, generic.UpdateView):
     template_name = "leads/lead_update.html"
     form_class = LeadModelForm
-    
+
     def get_form_kwargs(self):
         kwargs = super(LeadUpdateView, self).get_form_kwargs()
         kwargs['request'] = self.request
@@ -190,7 +225,7 @@ class LeadUpdateView(OrganisorAndLoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse("leads:lead-list")
-    
+
     def form_valid(self, form):
         form.save()
         messages.info(self.request, "Контакт был успешно изменен")
@@ -236,7 +271,7 @@ class CategoryListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         user = self.request.user
-        
+
         if user.is_organisor:
             queryset = Category.objects.filter(
                 organisation=user.userprofile
