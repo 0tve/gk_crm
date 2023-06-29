@@ -7,19 +7,26 @@
         <div class="w-full mb-6 py-6 flex justify-between items-center border-b border-gray-200">
             <div class='flex flex-row'>
                 <div class='pr-10'>
-                    <h1 class="text-4xl text-gray-800">Контакты</h1>
+                    <h1 class="text-4xl text-gray-800">Клиенты</h1>
                 </div>
             </div>
             <div class='flex flex-row'>
                 {% if request.user.is_organisor %}
                 <div class='mr-10 flex flex-row'>
                     <a class="text-gray-500 hover:text-blue-500 pr-2" href="{% url 'leads:unassigned-lead-list' %}">
-                        Без исполнителя
+                        Без ответственного
                     </a>
                     <div class="inline-flex items-center bg-gray-200 border-0 px-3 focus:outline-none rounded-full">
                         {{ unassigned_leads.count }}
                     </div>
                 </div>
+                <a class="text-gray-500 hover:text-blue-500 pr-2" href="{% url 'leads:lead-export' %}">
+                    Экспорт
+                </a>
+                <span class="text-gray-500 pr-2">|</span>
+                <a class="mr-10 text-gray-500 hover:text-blue-500 pr-2" href="{% url 'leads:lead-import' %}">
+                    Импорт
+                </a>
                 {% endif %}
                 {% if request.user.is_agent %}
                 <div>
@@ -27,12 +34,12 @@
                 <div class='mr-10'>
                 {% endif %}
                     <a class="text-gray-500 hover:text-blue-500" href="{% url 'leads:category-list' %}">
-                        Категории
+                        Статусы заказов
                     </a>
                 </div>
                 {% if request.user.is_organisor %}
                 <a class="text-gray-500 hover:text-blue-500" href="{% url 'leads:lead-create' %}">
-                    Добавить контакт
+                    Добавить клиента
                 </a>
                 {% endif %}
             </div>
@@ -61,9 +68,6 @@
                             </th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Ответственный
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Категория
                             </th>
                             {% if request.user.is_organisor %}
                             <th scope="col" class="relative px-6 py-3">
@@ -97,11 +101,11 @@
                                         {{ lead.agent.user.first_name }} {{ lead.agent.user.last_name }}
                                     </a>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                {% comment %} <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                     {{ lead.category.name }}
                                     </span>
-                                </td>
+                                </td> {% endcomment %}
                                 {% if request.user.is_organisor %}
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <a href="{% url 'leads:lead-toggle-active' lead.id %}">

@@ -7,18 +7,11 @@
         <div class="lg:w-2/4 mx-auto flex flex-wrap">
             <div class="w-full lg:py-6 mb-6 lg:mb-0">
                 <div class="my-6 border-b border-gray-200 w-full">
-                    <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку контактов</a>
+                    <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку клиентов</a>
                 </div>
-                <div class="w-full flex items-center justify-between space-x-6">
-                    <div class="flex-1">
-                        <h2 class="text-sm title-font text-gray-500 tracking-widest">КОНТАКТ</h2>
-                        <div class="flex space-x-3">
-                            <h3 class="text-3xl text-gray-900 font-medium">{{ lead.last_name }} {{ lead.first_name }} {{ lead.middle_name }}</h3>
-                        </div>
-                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">Заказ: {{ lead.order }}</p>
-                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">Адрес: {{ lead.address }}</p>
-                        <p class="mt-1 text-xl text-gray-500 whitespace-break-spaces">Ответственный: <a class='hover:text-blue-600' href="{% url 'agents:agent-detail' lead.agent.pk %}">{{ lead.agent.user.first_name }} {{ lead.agent.user.last_name }}</a></p>
-                    </div>
+                <h2 class="text-sm title-font text-gray-500 tracking-widest">КЛИЕНТ</h2>
+                <div class="w-full flex justify-between space-x-6">
+                    <h3 class="text-3xl text-gray-900 font-medium">{{ lead.last_name }} {{ lead.first_name }} {{ lead.middle_name }}</h3>
                     {% if lead.profile_picture %}
                     <img class="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0" src="{{ lead.profile_picture.url }}" alt="">
                     {% endif %}
@@ -27,24 +20,38 @@
                     <a href="{% url 'leads:lead-detail' lead.pk %}" class="flex-grow text-blue-500 border-b-2 border-blue-500 py-2 text-lg px-1">
                         Детали
                     </a>
-                    <a href="{% url 'leads:lead-category-update' lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
-                        Категории
+                    <a href="{% url 'leads:lead-orders' lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
+                        Заказы
                     </a>
                     <a href="{% url 'leads:lead-update' lead.pk %}" class="flex-grow border-b-2 border-gray-300 py-2 text-lg px-1">
                         Изменение
                     </a>    
                 </div>
                 <div class="flex border-t border-gray-300 py-2">
-                    <span class="text-gray-500">Возраст</span>
-                    <span class="ml-auto text-gray-900">{{ lead.age }}</span>
+                    <span class="text-gray-500">Ответственный</span>
+                    <span class="ml-auto text-gray-900">
+                        {% if lead.agent %}
+                        <p><a class='text-blue-500 hover:text-blue-600' href="{% url 'agents:agent-detail' lead.agent.pk %}">{{ lead.agent.user.first_name }} {{ lead.agent.user.last_name }}</a></p>
+                        {% else %}
+                        <p>Ответственный не назначен</p>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="flex border-t border-gray-300 py-2">
+                    <span class="text-gray-500">Адрес</span>
+                    <span class="ml-auto text-gray-900">{{ lead.address }}</span>
+                </div>
+                <div class="flex border-t border-gray-300 py-2">
+                    <span class="text-gray-500">Телефон</span>
+                    <span class="ml-auto text-gray-900">{{ lead.phone_number }}</span>
                 </div>
                 <div class="flex border-t border-gray-300 py-2">
                     <span class="text-gray-500">Почта</span>
                     <span class="ml-auto text-gray-900">{{ lead.email }}</span>
                 </div>
                 <div class="flex border-t border-b mb-6 border-gray-300 py-2">
-                    <span class="text-gray-500">Телефон</span>
-                    <span class="ml-auto text-gray-900">{{ lead.phone_number }}</span>
+                    <span class="text-gray-500">Возраст</span>
+                    <span class="ml-auto text-gray-900">{{ lead.age }}</span>
                 </div>
             </div>
 

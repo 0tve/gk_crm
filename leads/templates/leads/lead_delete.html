@@ -6,7 +6,7 @@
     <div>
         <a class="hover:text-blue-500" href="{% url 'leads:lead-update' lead.pk %}">Назад</a>
     </div>
-    <h1 class="py-5 border-t border-gray-200 text-3xl text-gray-800">Вы уверены, что хотите удалить данный контакт?</h1>
+    <h1 class="py-5 border-t border-gray-200 text-3xl text-gray-800">Вы уверены, что хотите удалить данного клиента?</h1>
     <form method="post" class="mt-5">
         {% csrf_token %}
         {{ form|crispy }}

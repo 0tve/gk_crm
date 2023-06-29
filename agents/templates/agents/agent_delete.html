@@ -6,7 +6,7 @@
     <div>
         <a class="hover:text-blue-500" href="{% url 'agents:agent-update' agent.pk %}">Назад</a>
     </div>
-    <h1 class="py-5 border-t border-gray-200 text-3xl text-gray-800">Вы уверены, что хотите удалить данного исполнителя?</h1>
+    <h1 class="py-5 border-t border-gray-200 text-3xl text-gray-800">Вы уверены, что хотите удалить данного сотрудника?</h1>
     <form method="post" class="mt-5">
         {% csrf_token %}
         {{ form|crispy }}

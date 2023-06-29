@@ -37,8 +37,8 @@
 
 {% block content %}
 <div class="max-w-lg mx-auto">
-    <a class="hover:text-blue-500" href="{% url 'agents:agent-list' %}">Вернуться к списку исполнителей</a>
-    <h1 class="text-4xl text-gray-800 py-5 border-t border-gray-200">Добавить исполнителя</h1>
+    <a class="hover:text-blue-500" href="{% url 'agents:agent-list' %}">Вернуться к списку сотрудников</a>
+    <h1 class="text-4xl text-gray-800 py-5 border-t border-gray-200">Добавить сотрудника</h1>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

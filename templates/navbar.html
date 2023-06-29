@@ -8,9 +8,9 @@
         {% if not request.user.is_authenticated %}
           <a href="{% url 'signup' %}" class="mr-5 hover:text-blue-500">Зарегистрироваться</a>
         {% else %}
-        <a href="{% url 'leads:lead-list' %}" class="mr-5 hover:text-blue-500">Контакты</a>
+        <a href="{% url 'leads:lead-list' %}" class="mr-5 hover:text-blue-500">Клиенты</a>
         {% if request.user.is_organisor %}
-        <a href="{% url 'agents:agent-list' %}" class="mr-5 hover:text-blue-500">Исполнители</a>
+        <a href="{% url 'agents:agent-list' %}" class="mr-5 hover:text-blue-500">Сотрудники</a>
         {% endif %}
         <a href="{% url 'leads:lead-archive' %}" class="mr-5 hover:text-blue-500">Архив</a>
         {% endif %}

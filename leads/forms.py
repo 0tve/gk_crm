@@ -1,26 +1,30 @@
 from typing import Any, Dict
+
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, UsernameField, AuthenticationForm, SetPasswordForm
-from .models import Lead, Agent, Category, FollowUp
-from agents.forms import CustomClearableFileInput
+from django.contrib.auth.forms import (AuthenticationForm, SetPasswordForm,
+                                       UserCreationForm, UsernameField)
 from django.utils.translation import gettext_lazy as _
-User = get_user_model()
 
+from agents.forms import CustomClearableFileInput
+
+from .models import Agent, Category, FollowUp, Lead, Order
+
+User = get_user_model()
+        
 
 class LeadModelForm(forms.ModelForm):
     class Meta:
         model = Lead
         fields = (
-            'first_name',
             'last_name',
+            'first_name',
             'middle_name',
             'age',
-            'agent',
             'address',
-            'order',
             'phone_number',
             'email',
+            'agent',
             'profile_picture',
         )
         
@@ -29,11 +33,10 @@ class LeadModelForm(forms.ModelForm):
             'last_name': 'Фамилия',
             'middle_name': 'Отчество',
             'age': 'Возраст',
-            'agent': 'Ответственный исполнитель',
             'address': 'Адрес',
-            'order': 'Заказ',
             'phone_number': 'Телефон',
             'email': 'Электронная почта',
+            'agent': 'Ответственный',
             'profile_picture': 'Фото',
         }
         
@@ -99,16 +102,32 @@ class AssignAgentForm(forms.Form):
         self.fields["agent"].queryset = agents
 
 
-class LeadCategoryUpdateForm(forms.ModelForm):
+class LeadImport(forms.Form):
+    excel_file = forms.FileField()
+
+
+class OrderModelForm(forms.ModelForm):
     class Meta:
-        model = Lead
+        model = Order
         fields = (
+            'name',
             'category',
         )
         
         labels = {
-            'category': 'Категория'
+            'name': '',
+            'category': '',
         }
+        
+        widgets = {
+          'name': forms.Textarea(attrs={'rows':1, 'cols':30}),
+        }
+        
+    # def __init__(self, *args, **kwargs):
+    #     # self.request = kwargs.pop('request')
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['agent'].queryset = Agent.objects.filter(organisation=self.request.user.userprofile)
+    #     self.fields['category'].queryset = Category.objects.filter(organisation=self.request.user.userprofile)
 
 
 class CategoryModelForm(forms.ModelForm):

@@ -8,9 +8,9 @@
       <div class="lg:w-2/4 mx-auto flex flex-wrap">
         <div class="w-full lg:py-6 mb-6 lg:mb-0">
             <div class="my-6 border-b border-gray-200 w-full">
-                <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку контактов</a>
+                <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку клиентов</a>
             </div>
-            <h2 class="text-sm title-font text-gray-500 tracking-widest">КОНТАКТ</h2>
+            <h2 class="text-sm title-font text-gray-500 tracking-widest">КЛИЕНТ</h2>
             <div class="w-full flex justify-between space-x-6">
             <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">{{ lead.first_name }} {{ lead.last_name }}</h1>
                 {% if lead.profile_picture %}

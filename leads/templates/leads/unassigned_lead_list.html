@@ -5,12 +5,12 @@
 <section class="text-gray-700 body-font">
     <div class="flex container mx-auto flex-wrap justify-between">
         <div class="my-6 mx-4 border-b border-gray-200 w-full">
-            <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку контактов</a>
+            <a href="{% url 'leads:lead-list' %}" class="hover:text-blue-500">Вернуться к списку клиентов</a>
         </div>
         {% if unassigned_leads.exists %}
         <div class="flex flex-wrap w-full">
             <div class="ml-4 w-full">
-                <h1 class="text-4xl text-gray-800">Неназначенные контакты</h1>
+                <h1 class="text-4xl text-gray-800">Клиенты без ответственного сотрудника</h1>
             </div>
             {% for lead in unassigned_leads %}
             <div class="p-4 lg:w-1/2 md:w-full">
@@ -25,7 +25,7 @@
                         <p class="whitespace-pre-line">{{ lead.order }}</p>
                         <p class="whitespace-pre-line">{{ lead.address }}</p>
                         <a href="{% url 'leads:assign-agent' lead.pk %}" class="mt-3 text-blue-500 hover:text-blue-600 inline-flex items-center">
-                            Назначить ответственного
+                            Назначить ответственного сотрудника
                             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
                                 <path d="M5 12h14M12 5l7 7-7 7"></path>
                             </svg>
@@ -36,7 +36,7 @@
             {% endfor %}
         </div>
         {% else %}
-        <p class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Контакты без исполнителя отсутствуют</p>
+        <p class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Клиенты без ответственного сотрудника отсутствуют</p>
         {% endif %}
     </div>
 </section>

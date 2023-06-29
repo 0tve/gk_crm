@@ -11,7 +11,6 @@ from django.contrib.auth.views import (
 from django.urls import path, include
 from leads.views import (LandingPageView, 
                          SignupView, 
-                         DashboardView, 
                          CustomLoginView, 
                          CustomPasswordResetConfirmView,
                          )
@@ -20,7 +19,6 @@ from leads.views import (LandingPageView,
 urlpatterns = [    
     path('admin/', admin.site.urls),
     path('', LandingPageView.as_view(), name='landing-page'),
-    path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('leads/',  include('leads.urls', namespace="leads")),
     path('agents/',  include('agents.urls', namespace="agents")),
     path('signup/', SignupView.as_view(), name='signup'),
